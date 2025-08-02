@@ -1,0 +1,14 @@
+# core
+pandas
+tqdm
+python-dotenv
+
+# google drive
+PyDrive2==1.17.0
+google-auth==2.*
+
+# OCR & NLP
+openai==1.*
+pillow
+sentence-transformers
+# add more as project grows
