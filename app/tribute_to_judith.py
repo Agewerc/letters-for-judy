@@ -14,39 +14,51 @@ def gallery_page():
 def rag_page():
     import numpy as np
     st.header("Perguntas RAG")
-    st.markdown("Faça uma pergunta sobre as cartas da Judith. (Exemplo: 'Quem escreveu mais cartas?')")
+    st.markdown("Faça uma pesquisa sobre as cartas da Judith.")
     question = st.text_input("Pergunta:", "")
     if question:
         # Load embeddings and letters
         embeddings = load_embeddings()
         letters = load_letters()
-        # Get embedding for the question using OpenAI
+        # Get embedding for the question using OpenAI v1.x API
         import openai
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         try:
-            response = openai.Embedding.create(
+            response = client.embeddings.create(
                 input=question,
-                model="text-embedding-ada-002"
+                model="text-embedding-3-small"
             )
-            q_emb = np.array(response['data'][0]['embedding'])
+            q_emb = np.array(response.data[0].embedding)
         except Exception as e:
             st.error(f"Erro ao gerar embedding da pergunta: {e}")
             return
         # Find most similar letter using precomputed embeddings
-        best_idx = None
-        best_score = -1
+        # Compute similarity for all valid embeddings
+        scored = []
         for i, emb in enumerate(embeddings):
-            emb_vec = np.array(emb)
+            if isinstance(emb, dict) and 'embedding' in emb:
+                emb_vec = np.array(emb['embedding'])
+            else:
+                emb_vec = np.array(emb)
+            if emb_vec is None or emb_vec.ndim != 1:
+                continue
+            if emb_vec.dtype.kind not in {'f', 'i'}:
+                continue
+            if np.any([v is None for v in emb_vec]):
+                continue
             score = np.dot(q_emb, emb_vec) / (np.linalg.norm(q_emb) * np.linalg.norm(emb_vec))
-            if score > best_score:
-                best_score = score
-                best_idx = i
-        if best_idx is not None:
-            st.write(f"Carta mais relevante para: '{question}'")
-            show_letter(letters[best_idx])
-            st.success(f"Similaridade: {best_score:.2f}")
+            scored.append((score, i))
+        # Filter and show top 20 relevant letters above threshold
+        threshold = 0.3
+        top = sorted([x for x in scored if x[0] > threshold], reverse=True)[:20]
+        if top:
+            st.write(f"Cartas mais relevantes para: '{question}' (top {len(top)})")
+            for score, idx in top:
+                show_letter(letters[idx])
+                st.success(f"Similaridade: {score:.2f}")
         else:
             st.info("Nenhuma carta relevante encontrada.")
+
 import streamlit as st
 import json
 import os
