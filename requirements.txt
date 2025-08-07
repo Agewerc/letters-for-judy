@@ -1,3 +1,10 @@
+pandas
+numpy
+matplotlib
+seaborn
+wordcloud
+nltk
+textblob
 # core
 pandas
 tqdm

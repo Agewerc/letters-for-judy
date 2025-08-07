@@ -63,8 +63,14 @@ def main():
     service = get_drive_service()
     files = list_files_in_folder(service, args.folder_id)
 
+    # Debug print: show how many files and their names/IDs
+    print(f"DEBUG: Found {len(files)} files in the folder.")
+    for f in files:
+        print(f"DEBUG: {f['name']} (id: {f['id']})")
+
     for f in tqdm(files, desc="Processing files"):
         download_file(service, f["id"], f["name"], args.local_root)
+        
 
 if __name__ == "__main__":
     main()
