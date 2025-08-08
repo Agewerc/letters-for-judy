@@ -14,7 +14,7 @@ def show_rag_page():
         """
         <h1 class='page-header'>🔍 Busca Inteligente</h1>
         <p class='page-description'>
-            Faça perguntas sobre as cartas e encontre as mais relevantes usando inteligência artificial
+            Encontre cartas específicas usando busca inteligente por conteúdo e temas
         </p>
         """,
         unsafe_allow_html=True
@@ -25,10 +25,10 @@ def show_rag_page():
         """
         <div style='margin: 2rem 0 1rem 0;'>
             <h3 style='color: #6c3483; font-family: Montserrat; margin-bottom: 0.5rem;'>
-                💭 Faça sua pergunta
+                � Busque nas cartas
             </h3>
             <p style='color: #a569bd; font-family: Montserrat; margin-bottom: 1rem;'>
-                Exemplos: "Quem escreveu mais cartas?", "Cartas sobre família", "Mensagens de aniversário"
+                Exemplos: "Cartas sobre família", "Mensagens de aniversário", "Lembranças da infância"
             </p>
         </div>
         """,
@@ -36,9 +36,9 @@ def show_rag_page():
     )
     
     question = st.text_input(
-        "Pergunta:",
-        placeholder="Digite sua pergunta sobre as cartas...",
-        help="Use linguagem natural para buscar cartas relacionadas ao seu interesse"
+        "Busca:",
+        placeholder="Digite o que você quer encontrar nas cartas...",
+        help="Use palavras-chave ou frases para encontrar cartas sobre temas específicos"
     )
     
     if question:
