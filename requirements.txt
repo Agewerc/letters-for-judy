@@ -1,21 +1,26 @@
+# Streamlit app dependencies
+streamlit>=1.28.0
 pandas
 numpy
+pillow
+pillow-heif
+
+# AI/ML dependencies
+openai>=1.0.0
+sentence-transformers
+
+# Utility dependencies
+python-dotenv
+tqdm
+
+# Optional dependencies for advanced features
 matplotlib
 seaborn
 wordcloud
 nltk
 textblob
-# core
-pandas
-tqdm
-python-dotenv
 
-# google drive
+# Google Drive integration (optional)
 PyDrive2==1.17.0
 google-auth==2.*
-
-# OCR & NLP
-openai==1.*
-pillow
-sentence-transformers
 # add more as project grows
