@@ -13,9 +13,9 @@ def gallery_page():
 
 def rag_page():
     import numpy as np
-    st.header("Perguntas RAG")
+    st.header("Pesquisa")
     st.markdown("Faça uma pesquisa sobre as cartas da Judith.")
-    question = st.text_input("Pergunta:", "")
+    question = st.text_input("", "")
     if question:
         # Load embeddings and letters
         embeddings = load_embeddings()
@@ -49,7 +49,7 @@ def rag_page():
             score = np.dot(q_emb, emb_vec) / (np.linalg.norm(q_emb) * np.linalg.norm(emb_vec))
             scored.append((score, i))
         # Filter and show top 20 relevant letters above threshold
-        threshold = 0.3
+        threshold = 0.2
         top = sorted([x for x in scored if x[0] > threshold], reverse=True)[:20]
         if top:
             st.write(f"Cartas mais relevantes para: '{question}' (top {len(top)})")
@@ -200,10 +200,10 @@ def main():
         """,
         unsafe_allow_html=True
     )
-    page = st.sidebar.selectbox("Escolha uma página", ["Galeria", "Perguntas RAG", "Galeria de Fotos"])
+    page = st.sidebar.selectbox("Escolha uma página", ["Galeria", "Pesquisa", "Galeria de Fotos"])
     if page == "Galeria":
         gallery_page()
-    elif page == "Perguntas RAG":
+    elif page == "Pesquisa":
         rag_page()
     elif page == "Galeria de Fotos":
         photo_gallery_page()
